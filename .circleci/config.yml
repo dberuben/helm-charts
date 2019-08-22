@@ -107,8 +107,8 @@ commands:
             echo $COMPONENT_DIR
             cd $COMPONENT_DIR
   upload:
-    parameter:
-      path:
+    parameters:
+      paths:
         type: string
         description: |
           A list of file paths used with 'git diff' to check for modification.
