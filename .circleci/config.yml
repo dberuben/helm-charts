@@ -53,6 +53,7 @@ jobs:
       - multirepo/run-job-for-paths:
           paths: ./
           working_directory: $PWD/dome-backend/
+          run_on_upstream: false
       # - run:
       #     name: Check if job should run
           # command: |
