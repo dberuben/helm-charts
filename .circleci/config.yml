@@ -55,6 +55,8 @@ commands:
       - run:
           name: Check if job should run
           command: |
+            echo $HOME
+            pwd
             cd << parameters.working_directory >>
             ls
 
