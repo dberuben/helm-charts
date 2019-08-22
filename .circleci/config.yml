@@ -16,6 +16,15 @@ workflows:
                 - master
                 - test
 
+jobs:
+  deploy:
+    docker:
+      - image: docker:stable-git
+    steps:
+      - deploy:
+          path: "."
+          run_on_upstream: false
+
 commands:
   deploy:
     parameters:
