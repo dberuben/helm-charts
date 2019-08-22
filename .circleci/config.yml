@@ -38,10 +38,10 @@ jobs:
           paths: "dome-backend"
           run_on_upstream: false
       - run: echo $COMPONENT_DIR  
-    - persist_to_workspace:
-          root: workspace
-          paths:
-              - new-env-vars
+      - persist_to_workspace:
+            root: workspace
+            paths:
+                - new-env-vars
   upload:
     <<: *defaults
     docker:
@@ -50,7 +50,7 @@ jobs:
       - attach_workspace:
           at: /tmp/workspace
       - run: cat workspace/new-env-vars >> $BASH_ENV
-      - ls -la
+      - run: ls -la
       - run: echo $COMPONENT_DIR
       - upload:
           paths: ""
