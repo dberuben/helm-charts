@@ -15,6 +15,12 @@ workflows:
               only:
                 - master
                 - test
+      - upload:
+          filters:
+            branches:
+              only:
+                - master
+                - test
 
 jobs:
   deploy:
@@ -24,6 +30,13 @@ jobs:
       - deploy:
           paths: "dome-backend"
           run_on_upstream: false
+  upload:
+    docker:
+      - image: alpine/helm:2.13.0
+    steps:
+      - upload:
+          paths: ""
+    
 
 commands:
   deploy:
@@ -93,6 +106,29 @@ commands:
             export COMPONENT_DIR="$COMPONENT"
             echo $COMPONENT_DIR
             cd $COMPONENT_DIR
+  upload:
+    parameter:
+      path:
+        type: string
+        description: |
+          A list of file paths used with 'git diff' to check for modification.
+        default: "dome-backend"
+    steps:
+      - checkout
+      - run:
+        name: Upload Helm Chart
+        command: |
+          echo $COMPONENT_DIR
+          cd $COMPONENT_DIR
+          helm init --client-only
+          helm repo add charts https://charts.tmt.tools --username $TMT_CHARTS_USERNAME --password $TMT_CHARTS_PASSWORD
+          helm dep build
+          helm package .
+          FILENAME="$(find . \( -name "$COMPONENT*.tgz" \) -exec basename {} \;)"
+          if [ "$FILENAME" == "" ]; then echo "No Chart Version Found!" && exit 1;  fi
+          echo $FILENAME
+          curl --user $TMT_CHARTS_USERNAME:$TMT_CHARTS_PASSWORD --data-binary "@$FILENAME" https://charts.tmt.tools/api/charts
+
 
           
 
