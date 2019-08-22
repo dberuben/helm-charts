@@ -25,8 +25,7 @@ workflows:
                 - test
 
 defaults: &defaults
-  working_directory: /tmp
-
+  working_directory: /tmp/cci-test
                 
 jobs:
   deploy:
@@ -48,7 +47,7 @@ jobs:
       - image: alpine/helm:2.13.0
     steps:
       - attach_workspace:
-          at: /tmp/workspace
+          at: /tmp/cci-testworkspace
       - run: cat workspace/new-env-vars >> $BASH_ENV
       - run: ls -la
       - run: echo $COMPONENT_DIR
