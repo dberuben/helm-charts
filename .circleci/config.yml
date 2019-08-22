@@ -51,7 +51,7 @@ jobs:
       - run: echo $PWD
       - run: pwd
       - multirepo/run-job-for-paths:
-          paths: ./
+          paths: /
           working_directory: $PWD/dome-backend/
           run_on_upstream: false
       - run: echo $PAGER
