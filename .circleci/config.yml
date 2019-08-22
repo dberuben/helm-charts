@@ -74,7 +74,7 @@ commands:
             fi
   
             # Print the diff
-            PAGER=cat git diff --stat=80 $upstream -- << parameters.paths >>
+            PAGER=cat git diff --stat=80 $upstream -- << parameters.paths >> | sed 's|\([^\/]*\).*|\1|'  | uniq
   
             # Halt if no diff
             if git diff --quiet $upstream -- << parameters.paths >>; then
@@ -83,6 +83,14 @@ commands:
             fi
 
             echo $PAGER
+            export COMPONENT="NOTSET"
+            for CHANGE in $PAGER; do if [ "$COMPONENT" == "NOTSET" ]; then export COMPONENT="$CHANGE"; else echo "Only one component per PR should be changed" && exit 1;  fi; done
+            if [ "$COMPONENT" == "NOTSET" ]; then echo "No component is changed!" && exit 1;  fi
+            echo "Initializing Component => $COMPONENT"
+            echo $COMPONENT | cut -f1 -d"/"
+            export COMPONENT_DIR="$COMPONENT"
+            echo $COMPONENT_DIR
+            cd $COMPONENT_DIR
 
           
 
