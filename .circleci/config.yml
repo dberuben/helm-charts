@@ -50,7 +50,7 @@ jobs:
       - checkout
       - run: ls
       - multirepo/run-job-for-paths:
-          paths: "."
+          #paths: "."
           working_directory: $PWD
           run_on_upstream: false
       - run: echo $PAGER
