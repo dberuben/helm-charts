@@ -49,7 +49,7 @@ jobs:
     steps:
       - checkout
       - multirepo/run-job-for-paths:
-          paths: "dome-backend/"
+          paths: "."
           working_directory: $PWD
           run_on_upstream: false
       - run: echo $PAGER
