@@ -8,9 +8,9 @@ jobs:
       - checkout
 
       - run:
-          name: Greeting
+          name: Greetings
           command: echo Hello, world. New Commitss
 
       - run:
-          name: Print the Current Time
-          command: date
+          name: Print the Current Times
+          command: datess
