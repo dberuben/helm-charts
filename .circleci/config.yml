@@ -107,7 +107,7 @@ commands:
             echo $COMPONENT_DIR
             # cd $COMPONENT_DIR
             echo "export HELM_DIR=$COMPONENT_DIR" >> $BASH_ENV
-            ech0 "Helm Dir => $HELM_DIR"
+            echo "Helm Dir => $HELM_DIR"
 
   upload:
     parameters:
