@@ -24,18 +24,34 @@ workflows:
                 - master
                 - test
 
+defaults: &defaults
+  working_directory: /tmp
+
+                
 jobs:
   deploy:
+    <<: *defaults
     docker:
       - image: docker:stable-git
     steps:
       - deploy:
           paths: "dome-backend"
           run_on_upstream: false
+      - run: echo $COMPONENT_DIR  
+    - persist_to_workspace:
+          root: workspace
+          paths:
+              - new-env-vars
   upload:
+    <<: *defaults
     docker:
       - image: alpine/helm:2.13.0
     steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - run: cat workspace/new-env-vars >> $BASH_ENV
+      - ls -la
+      - run: echo $COMPONENT_DIR
       - upload:
           paths: ""
     
@@ -72,32 +88,25 @@ commands:
           name: Check if job should run
           command: |
             cd << parameters.working_directory >>
-            
             upstream="$(git merge-base HEAD << parameters.upstream_branch >>)"
             echo "Comparing to upstream commit $upstream"
-
             <<# parameters.run_on_upstream >>
             if [[ "$(git rev-parse HEAD)" == "$upstream" ]]; then
               echo "HEAD matches upstream, running with no diff"
               exit 0
             fi
             <</ parameters.run_on_upstream >>
-
             if [[ -z "$upstream" ]]; then
               echo "git merge-base failed"
               exit 1
             fi
-  
             # Print the diff
             export PAGER=$(git diff --name-only --stat=80 $upstream -- << parameters.paths >> | sed 's|\([^\/]*\).*|\1|'  | uniq)
- 
-  
             # Halt if no diff
             if git diff --quiet $upstream -- << parameters.paths >>; then
               echo "Skipping job, no files modified"
               circleci-agent step halt
             fi
-
             echo "Changed Components are  => $PAGER"
             export COMPONENT="NOTSET"
             for CHANGE in $PAGER; do ENV_DIR=${CHANGE%%/*}; done
@@ -108,6 +117,10 @@ commands:
             export COMPONENT_DIR="$COMPONENT"
             echo $COMPONENT_DIR
             cd $COMPONENT_DIR
+            mkdir -p workspace
+            echo "export HELM_DIR=$COMPONENT_DIR" >> workspace/new-env-vars
+            cat workspace/new-env-vars >> $BASH_ENV
+
   upload:
     parameters:
       paths:
