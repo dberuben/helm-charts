@@ -74,7 +74,7 @@ commands:
             fi
   
             # Print the diff
-            export PAGER=$(git diff --stat=80 $upstream -- << parameters.paths >> | sed 's|\([^\/]*\).*|\1|'  | uniq)
+            export PAGER=$(git diff --name-only --stat=80 $upstream -- << parameters.paths >> | sed 's|\([^\/]*\).*|\1|'  | uniq)
  
   
             # Halt if no diff
