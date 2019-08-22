@@ -16,6 +16,8 @@ workflows:
                 - master
                 - test
       - upload:
+          requires:
+            - deploy
           filters:
             branches:
               only:
@@ -128,47 +130,3 @@ commands:
             if [ "$FILENAME" == "" ]; then echo "No Chart Version Found!" && exit 1;  fi
             echo $FILENAME
             curl --user $TMT_CHARTS_USERNAME:$TMT_CHARTS_PASSWORD --data-binary "@$FILENAME" https://charts.tmt.tools/api/charts
-
-
-          
-
-
-
-
-
-# jobs:
-#   deploy:
-#     docker:
-#       - image: docker:stable-git
-#     steps:
-#       - checkout
-#       - run: ls .
-#       - multirepo/run-job-for-paths:
-#           paths: dome-backend
-#           working_directory: $PWD
-#           run_on_upstream: false
-#       - run: echo $PAGER
-#       - run:
-#           name: Before Steps
-#           command: |
-#             # apk update && apk add curl && apk add --no-cache bash git openssh
-#             echo "Resetting $target_branch to where the remote version is..."
-#             git checkout -q $target_branch
-#             git reset --hard -q origin/$target_branch
-#             git checkout -q $CIRCLE_BRANCH
-
-#             echo "Getting list of changed files..."
-#             export NEW_REF=$CIRCLE_SHA1
-#             if [ $CI_MERGE_REQUEST_TARGET_BRANCH_NAME ]; then export BASE_REF="origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"; else export BASE_REF="$CI_COMMIT_BEFORE_SHA";  fi
-#             echo $BASE_REF
-#             echo $NEW_REF
-#             git fetch origin
-#             git diff --name-only $NEW_REF $BASE_REF
-#             export COMPONENT="NOTSET"
-#             export CHANGED_FILES=$(git diff --name-only $NEW_REF $BASE_REF | sed 's|\([^\/]*\).*|\1|'  | uniq)
-#             for CHANGE in $CHANGED_FILES; do if [ "$COMPONENT" == "NOTSET" ]; then export COMPONENT="$CHANGE"; else echo "Only one component per PR should be changed" && exit 1;  fi; done
-#             if [ "$COMPONENT" == "NOTSET" ]; then echo "No component is changed!" && exit 1;  fi
-#             echo "Initializing Component => $COMPONENT"
-#             export COMPONENT_DIR="$COMPONENT"
-#             echo $COMPONENT_DIR
-    
