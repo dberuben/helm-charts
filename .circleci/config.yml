@@ -22,7 +22,7 @@ jobs:
       - image: docker:stable-git
     steps:
       - deploy:
-          path: "."
+          paths: "."
           run_on_upstream: false
 
 commands:
