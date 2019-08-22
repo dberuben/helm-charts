@@ -74,7 +74,8 @@ commands:
             fi
   
             # Print the diff
-            PAGER=cat git diff --stat=80 $upstream -- << parameters.paths >> | sed 's|\([^\/]*\).*|\1|'  | uniq
+            export PAGER=cat git diff --stat=80 $upstream -- << parameters.paths >> | sed 's|\([^\/]*\).*|\1|'  | uniq
+ 
   
             # Halt if no diff
             if git diff --quiet $upstream -- << parameters.paths >>; then
@@ -82,7 +83,7 @@ commands:
               circleci-agent step halt
             fi
 
-            echo $PAGER
+            echo "Changed Components are  => $PAGER"
             export COMPONENT="NOTSET"
             for CHANGE in $PAGER; do if [ "$COMPONENT" == "NOTSET" ]; then export COMPONENT="$CHANGE"; else echo "Only one component per PR should be changed" && exit 1;  fi; done
             if [ "$COMPONENT" == "NOTSET" ]; then echo "No component is changed!" && exit 1;  fi
