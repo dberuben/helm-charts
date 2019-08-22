@@ -120,7 +120,7 @@ commands:
       - run:
           name: Upload Helm Chart
           command: |
-            echo $COMPONENT_DIR
+            echo "Initializing Dir => $COMPONENT_DIR"
             cd $COMPONENT_DIR
             helm init --client-only
             helm repo add charts https://charts.tmt.tools --username $TMT_CHARTS_USERNAME --password $TMT_CHARTS_PASSWORD
