@@ -52,16 +52,12 @@ commands:
           the upstream_branch.
         default: true
     steps:
+      - checkout
       - run:
           name: Check if job should run
           command: |
-            echo $HOME
-            pwd
             cd << parameters.working_directory >>
-            ls
-            cd $HOME/project/
-            ls
-
+            
             upstream="$(git merge-base HEAD << parameters.upstream_branch >>)"
             echo "Comparing to upstream commit $upstream"
 
