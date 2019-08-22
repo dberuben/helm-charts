@@ -48,9 +48,11 @@ jobs:
       - image: docker:stable-git
     steps:
       - checkout
+      - run: echo $PWD
+      - run: pwd
       - multirepo/run-job-for-paths:
           paths: /
-          working_directory: dome-backend/
+          working_directory: $PWD/dome-backend/
       # - run:
       #     name: Check if job should run
           # command: |
