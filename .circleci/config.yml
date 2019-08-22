@@ -43,7 +43,7 @@ commands:
         type: string
         description: |
           Directory to change to before executing the command.
-        default: "PWD"
+        default: "$PWD"
       run_on_upstream:
         type: boolean
         description: |
@@ -56,6 +56,7 @@ commands:
           name: Check if job should run
           command: |
             cd << parameters.working_directory >>
+            ls
 
             upstream="$(git merge-base HEAD << parameters.upstream_branch >>)"
             echo "Comparing to upstream commit $upstream"
