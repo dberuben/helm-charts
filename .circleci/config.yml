@@ -25,9 +25,7 @@ workflows:
               only:
                 - master
                 - test
-
-  working_directory: /tmp/cci-test
-                
+                                
 jobs:
   deploy:
     docker:
