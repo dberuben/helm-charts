@@ -50,7 +50,7 @@ jobs:
           at: /tmp/cci-test/workspace
       - run: cat workspace/new-env-vars >> $BASH_ENV
       - run: ls -la
-      - run: echo $COMPONENT_DIR
+      - run: echo $HELM_DIR
       - upload:
           paths: ""
     
@@ -115,7 +115,7 @@ commands:
             echo $COMPONENT | cut -f1 -d"/"
             export COMPONENT_DIR="$COMPONENT"
             echo $COMPONENT_DIR
-            cd $COMPONENT_DIR
+            # cd $COMPONENT_DIR
             mkdir -p workspace
             echo "export HELM_DIR=$COMPONENT_DIR" >> workspace/new-env-vars
             cat workspace/new-env-vars >> $BASH_ENV
