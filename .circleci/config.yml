@@ -48,9 +48,9 @@ jobs:
       - image: docker:stable-git
     steps:
       - checkout
-      - run: ls
+      - run: ls .
       - multirepo/run-job-for-paths:
-          #paths: "."
+          paths: dome-backend
           working_directory: $PWD
           run_on_upstream: false
       - run: echo $PAGER
