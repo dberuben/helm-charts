@@ -22,7 +22,7 @@ jobs:
       - run:
           name: Before Steps
           command: |
-            apk update && apk add curl && apk add --no-cache bash git openssh
+            # apk update && apk add curl && apk add --no-cache bash git openssh
             export NEW_REF=$CI_COMMIT_SHA
             if [ $CI_MERGE_REQUEST_TARGET_BRANCH_NAME ]; then export BASE_REF="origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"; else export BASE_REF="$CI_COMMIT_BEFORE_SHA";  fi
             echo $BASE_REF
