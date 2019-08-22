@@ -8,7 +8,7 @@ jobs:
       - checkout
 
       - run:
-          name: Greetings
+          name: Greetingsss
           command: echo Hello, world. New Commitss
 
       - run:
