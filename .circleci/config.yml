@@ -17,7 +17,6 @@ jobs:
   deploy:
     docker:
       - image: alpine/helm:2.13.0
-      - entrypoint: [""]
     steps:
       - checkout
       - run:
