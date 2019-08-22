@@ -48,7 +48,7 @@ jobs:
       - image: docker:stable-git
     steps:
       - checkout
-      - multirepo/run-job-for-paths
+      - multirepo/run-job-for-paths:
           paths: "/"
       # - run:
       #     name: Check if job should run
