@@ -43,7 +43,7 @@ commands:
         type: string
         description: |
           Directory to change to before executing the command.
-        default: "$PWD"
+        default: "PWD"
       run_on_upstream:
         type: boolean
         description: |
