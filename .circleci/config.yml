@@ -10,12 +10,14 @@ workflows:
   deploy:
     jobs:
       - deploy:
+          context: variables
           filters:
             branches:
               only:
                 - master
                 - test
       - upload:
+          context: variables
           requires:
             - deploy
           filters:
@@ -24,31 +26,21 @@ workflows:
                 - master
                 - test
 
-defaults: &defaults
   working_directory: /tmp/cci-test
                 
 jobs:
   deploy:
-    <<: *defaults
     docker:
       - image: docker:stable-git
     steps:
       - deploy:
           paths: "dome-backend"
           run_on_upstream: false
-      - run: echo $COMPONENT_DIR  
-      - persist_to_workspace:
-            root: workspace
-            paths:
-                - new-env-vars
+      
   upload:
-    <<: *defaults
     docker:
       - image: alpine/helm:2.13.0
     steps:
-      - attach_workspace:
-          at: /tmp/cci-test/workspace
-      - run: cat workspace/new-env-vars >> $BASH_ENV
       - run: ls -la
       - run: echo $HELM_DIR
       - upload:
@@ -116,9 +108,7 @@ commands:
             export COMPONENT_DIR="$COMPONENT"
             echo $COMPONENT_DIR
             # cd $COMPONENT_DIR
-            mkdir -p workspace
-            echo "export HELM_DIR=$COMPONENT_DIR" >> workspace/new-env-vars
-            cat workspace/new-env-vars >> $BASH_ENV
+            echo "export HELM_DIR=$COMPONENT_DIR" >> $BASH_ENV
 
   upload:
     parameters:
