@@ -48,6 +48,7 @@ jobs:
       - image: docker:stable-git
     steps:
       - checkout
+      - run: ls
       - multirepo/run-job-for-paths:
           paths: "."
           working_directory: $PWD
