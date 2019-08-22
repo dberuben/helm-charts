@@ -54,34 +54,7 @@ jobs:
           paths: ./
           working_directory: $PWD/dome-backend/
           run_on_upstream: false
-      # - run:
-      #     name: Check if job should run
-          # command: |
-          #   cd << parameters.working_directory >>
-
-          #   upstream="$(git merge-base HEAD << parameters.upstream_branch >>)"
-          #   echo "Comparing to upstream commit $upstream"
-
-          #   <<# parameters.run_on_upstream >>
-          #   if [[ "$(git rev-parse HEAD)" == "$upstream" ]]; then
-          #     echo "HEAD matches upstream, running with no diff"
-          #     exit 0
-          #   fi
-          #   <</ parameters.run_on_upstream >>
-
-          #   if [[ -z "$upstream" ]]; then
-          #     echo "git merge-base failed"
-          #     exit 1
-          #   fi
-  
-          #   # Print the diff
-          #   PAGER=cat git diff --stat=80 $upstream -- << parameters.paths >>
-  
-          #   # Halt if no diff
-          #   if git diff --quiet $upstream -- << parameters.paths >>; then
-          #     echo "Skipping job, no files modified"
-          #     circleci-agent step halt
-          #   fi
+      - run: echo $PAGER
       - run:
           name: Before Steps
           command: |
