@@ -22,7 +22,7 @@ jobs:
       - image: docker:stable-git
     steps:
       - deploy:
-          paths: "."
+          paths: "dome-backend"
           run_on_upstream: false
 
 commands:
