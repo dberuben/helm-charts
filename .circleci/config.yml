@@ -57,7 +57,7 @@ commands:
           command: |
             echo $HOME
             pwd
-            cd << parameters.working_directory >>
+            #cd << parameters.working_directory >>
             ls
 
             upstream="$(git merge-base HEAD << parameters.upstream_branch >>)"
