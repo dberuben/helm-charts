@@ -34,14 +34,14 @@ jobs:
       - deploy:
           paths: "."
           run_on_upstream: false
-      
+      - run: echo $COMPONENT_DIR
+      - run: echo $HELM_DIR
   upload:
     docker:
       - image: alpine/helm:2.13.0
     steps:
       - run: ls -la
       - run: echo $HELM_DIR
-      - run: echo $COMPONENT_DIR
       - upload:
           paths: ""
     
