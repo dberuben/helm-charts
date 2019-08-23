@@ -32,7 +32,7 @@ jobs:
       - image: docker:stable-git
     steps:
       - deploy:
-          paths: ""
+          paths: "."
           run_on_upstream: false
       
   upload:
