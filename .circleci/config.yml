@@ -3,7 +3,6 @@ version: 2.1
 orbs:
   docker: circleci/docker@0.5.1
   helm: circleci/helm@0.1.3
-  multirepo: dnephin/multirepo@0.0.7
 
 workflows:
   version: 2
@@ -23,35 +22,14 @@ jobs:
       - image: alpine/helm:2.13.0
     steps:
       - deploy:
-          paths: "."
-          run_on_upstream: false
+          working_directory: "$PWD"
       
 commands:
   deploy:
     parameters:
-      paths:
-        type: string
-        description: |
-          A list of file paths used with 'git diff' to check for modifications.
-        default: ""
-      upstream_branch:
-        type: string
-        description: |
-          The upstream branch used with 'git merge-base' to find the most recent
-          commit shared by HEAD and the upstream branch.
-        default: origin/master
       working_directory:
         type: string
-        description: |
-          Directory to change to before executing the command.
         default: "$PWD"
-      run_on_upstream:
-        type: boolean
-        description: |
-          When run_on_upstream is true, and HEAD matches the upstream_branch the
-          job always run. When false the job will not run when HEAD matches
-          the upstream_branch.
-        default: true
     steps:
       - checkout
       - run:
@@ -63,7 +41,7 @@ commands:
             echo "Changed Components are  => $PAGER"
             export COMPONENT="NOTSET"
             for CHANGE in $PAGER; do ENV_DIR=${CHANGE%%/*}; done
-            for CHANGE in $PAGER; do if [ "$CHANGE" != ".*"   ] && [ "$ENV_DIR" == "${CHANGE%%/*}" ]; then export COMPONENT="$CHANGE"; else echo "Only one component per PR should be changed" && exit 1;  fi; done
+            for CHANGE in $PAGER; do if [[ $CHANGE != .* ]] && [[ "$ENV_DIR" == "${CHANGE%%/*}" ]]; then export COMPONENT="$CHANGE"; elif [[ $CHANGE != .* ]]; then echo "Only one component per PR should be changed" && exit 1; fi; done
             if [ "$COMPONENT" == "NOTSET" ]; then echo "No component is changed!" && exit 1;  fi
             echo "Initializing Component => $COMPONENT"
             echo $COMPONENT | cut -f1 -d"/"
