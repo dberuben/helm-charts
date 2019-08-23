@@ -32,7 +32,7 @@ jobs:
       - image: docker:stable-git
     steps:
       - deploy:
-          paths: "dome-backend"
+          paths: ""
           run_on_upstream: false
       
   upload:
@@ -52,7 +52,7 @@ commands:
         type: string
         description: |
           A list of file paths used with 'git diff' to check for modification.
-        default: "dome-backend"
+        default: ""
       upstream_branch:
         type: string
         description: |
@@ -63,7 +63,7 @@ commands:
         type: string
         description: |
           Directory to change to before executing the command.
-        default: "$PWD"
+        default: "$PWD/dome-backend"
       run_on_upstream:
         type: boolean
         description: |
