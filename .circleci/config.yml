@@ -44,7 +44,7 @@ commands:
 
             for CHANGE in $PAGER; do echo $CHANGE; done
 
-            for CHANGE in $PAGER; do if [[ "${CHANGE%%/*}" != "."* ]] && [[ "$ENV_DIR" == "${CHANGE%%/*}" ]]; then export COMPONENT="$CHANGE"; elif [[ "${CHANGE%%/*}" != "."* ]]; then echo "Only one component per PR should be changed" && exit 1; else echo "Let it Go"; fi; done
+            for CHANGE in $PAGER; do if [[ "${CHANGE%%/*}" =~ ^.* ]] && [[ "$ENV_DIR" == "${CHANGE%%/*}" ]]; then export COMPONENT="$CHANGE"; elif [[ "${CHANGE%%/*}" =~ ^.* ]]; then echo "Only one component per PR should be changed" && exit 1; else echo "Let it Go"; fi; done
             # for CHANGE in $PAGER; do if [[ "$ENV_DIR" == "${CHANGE%%/*}" ]]; then export COMPONENT="$CHANGE"; else echo "Only one component per PR should be changed" && exit 1; fi; done
             if [ "$COMPONENT" == "NOTSET" ]; then echo "No component is changed!" && exit 1;  fi
             echo "Initializing Component => $COMPONENT"
