@@ -31,7 +31,6 @@ jobs:
     docker:
       - image: docker:stable-git
     steps:
-      - run: echo "COmpare URL => $CIRCLE_COMPARE_URL"
       - deploy:
           paths: "."
           run_on_upstream: false
@@ -59,7 +58,7 @@ commands:
         description: |
           The upstream branch used with 'git merge-base' to find the most recent
           commit shared by HEAD and the upstream branch.
-        default: origin/test
+        default: origin/master
       working_directory:
         type: string
         description: |
