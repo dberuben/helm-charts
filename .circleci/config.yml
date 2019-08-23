@@ -31,6 +31,7 @@ jobs:
     docker:
       - image: docker:stable-git
     steps:
+      - run: echo "COmpare URL => $CIRCLE_COMPARE_URL"
       - deploy:
           paths: "."
           run_on_upstream: false
@@ -78,6 +79,7 @@ commands:
           command: |
             cd << parameters.working_directory >>
             upstream="$(git merge-base HEAD << parameters.upstream_branch >>)"
+
             echo "Comparing to upstream commit $upstream"
             <<# parameters.run_on_upstream >>
             if [[ "$(git rev-parse HEAD)" == "$upstream" ]]; then
