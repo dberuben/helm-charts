@@ -89,8 +89,18 @@ commands:
             if [ "$COMPONENT" == "NOTSET" ]; then echo "No component is changed!" && exit 1;  fi
             echo "Initializing Component => $COMPONENT"
             echo $COMPONENT | cut -f1 -d"/"
-            export COMPONENT_DIR="$COMPONENT"
+            export COMPONENT_DIR="$COMPONENT%%/*"
             echo "Changed Dir => $COMPONENT_DIR"
+            cd $COMPONENT_DIR
+            helm init --client-only
+            helm repo add charts https://charts.tmt.tools --username $TMT_CHARTS_USERNAME --password $TMT_CHARTS_PASSWORD
+            helm dep build
+            helm package .
+            FILENAME="$(find . \( -name "$COMPONENT*.tgz" \) -exec basename {} \;)"
+            if [ "$FILENAME" == "" ]; then echo "No Chart Version Found!" && exit 1;  fi
+            echo $FILENAME
+            curl --user $TMT_CHARTS_USERNAME:$TMT_CHARTS_PASSWORD --data-binary "@$FILENAME" https://charts.tmt.tools/api/charts
+
             
 
 
