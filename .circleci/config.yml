@@ -90,7 +90,7 @@ commands:
               exit 1
             fi
             # Print the diff
-            export PAGER=$(git diff --name-only --stat=80 $upstream -- << parameters.paths >> | sed 's|\([^\/]*\).*|\1|'  | uniq)
+            export PAGER=$(git diff --name-only --stat=80 $upstream -- << parameters.paths >>)
             # Halt if no diff
             if git diff --quiet $upstream -- << parameters.paths >>; then
               echo "Skipping job, no files modified"
