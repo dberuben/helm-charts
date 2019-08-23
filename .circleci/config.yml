@@ -41,6 +41,7 @@ jobs:
     steps:
       - run: ls -la
       - run: echo $HELM_DIR
+      - run: echo $COMPONENT_DIR
       - upload:
           paths: ""
     
@@ -106,10 +107,12 @@ commands:
             echo $COMPONENT | cut -f1 -d"/"
             export COMPONENT_DIR="$COMPONENT"
             echo $COMPONENT_DIR
+            #####################################################
             # cd $COMPONENT_DIR
             echo 'export HELM_DIR=$COMPONENT_DIR' >> $BASH_ENV
             echo "Helm Dir => $HELM_DIR"
             echo "Bash Env => $BASH_ENV"
+
 
   upload:
     parameters:
