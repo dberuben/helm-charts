@@ -29,29 +29,15 @@ workflows:
 jobs:
   deploy:
     docker:
-      - image: docker:stable-git
+      - image: alpine/helm:2.13.0
     steps:
-      - checkout
-      - run: export PAGER=$(git diff-tree --no-commit-id --name-only -r HEAD)
-      - run: echo "Changed Components are  => $PAGER"
-      - run: export COMPONENT="NOTSET"
-      - run: for CHANGE in $PAGER; do ENV_DIR=${CHANGE%%/*}; done
-      - run: for CHANGE in $PAGER; do if [ "$CHANGE" != ".*"   ] && [ "$ENV_DIR" == "${CHANGE%%/*}" ]; then export COMPONENT="$CHANGE"; else echo "Only one component per PR should be changed" && exit 1;  fi; done
-      - run: if [ "$COMPONENT" == "NOTSET" ]; then echo "No component is changed!" && exit 1;  fi
-      - run: echo "Initializing Component => $COMPONENT"
-      - run: echo $COMPONENT | cut -f1 -d"/"
-      - run: export COMPONENT_DIR="$COMPONENT"
-      - run: echo $COMPONENT_DIR
-      - run: echo 'export HELM_DIR=$COMPONENT_DIR' >> $BASH_ENV
-      - run: echo "Helm Dir => $HELM_DIR"
-      - run: echo "Bash Env => $BASH_ENV"
-      
-      
       - deploy:
           paths: "."
           run_on_upstream: false
       - run: echo $COMPONENT_DIR
       - run: echo $HELM_DIR
+  
+  
   upload:
     docker:
       - image: alpine/helm:2.13.0
@@ -93,6 +79,7 @@ commands:
       - run:
           name: Check if job should run
           command: |
+            apk update && apk add curl && apk add --no-cache bash git openssh
             cd << parameters.working_directory >>
             export PAGER=$(git diff-tree --no-commit-id --name-only -r HEAD)
             echo "Changed Components are  => $PAGER"
