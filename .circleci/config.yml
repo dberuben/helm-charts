@@ -89,7 +89,7 @@ commands:
             if [ "$COMPONENT" == "NOTSET" ]; then echo "No component is changed!" && exit 1;  fi
             echo "Initializing Component => $COMPONENT"
             echo $COMPONENT | cut -f1 -d"/"
-            export COMPONENT_DIR="$COMPONENT%%/*"
+            export COMPONENT_DIR="${COMPONENT%%/*}"
             echo "Changed Dir => $COMPONENT_DIR"
             cd $COMPONENT_DIR
             helm init --client-only
